@@ -12,11 +12,6 @@ class App extends Component {
     socket.on('connect', () => {
         console.log('Connected to server');
 
-
-        socket.emit('createMessage', {
-            from: 'Kev',
-            text: 'Yup'
-        });
     });
 
     // Fires when the connection drops

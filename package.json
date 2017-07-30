@@ -9,6 +9,9 @@
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
+    "expect": "^1.20.2",
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
     "react-scripts": "1.0.10"
   },
   "scripts": {
@@ -16,7 +19,9 @@
     "start-d": "nodemon server/server.js",
     "start-r": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test-r": "react-scripts test --env=jsdom",
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec npm test",
     "eject": "react-scripts eject"
   },
   "engines": {

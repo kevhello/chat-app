@@ -2,7 +2,23 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const io = require('socket.io-client');
+const socket = io();
+
+
 class App extends Component {
+  componentDidMount(){
+    // When the client connects
+    socket.on('connect', () => {
+        console.log('Connected to server');
+
+        // Fires when the connection drops
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+    });
+  }
+
   render() {
     return (
       <div className="App">

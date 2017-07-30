@@ -7,7 +7,7 @@
 /coverage
 
 # production
-/build
+#/build - Need in order to deploy React App to heroku
 
 # misc
 .DS_Store

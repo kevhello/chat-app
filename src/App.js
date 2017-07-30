@@ -12,10 +12,20 @@ class App extends Component {
     socket.on('connect', () => {
         console.log('Connected to server');
 
-        // Fires when the connection drops
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server');
+
+        socket.emit('createMessage', {
+            from: 'Kev',
+            text: 'Yup'
         });
+    });
+
+    // Fires when the connection drops
+    socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+    });
+
+    socket.on('newMessage', (message) => {
+        console.log('newMessage', message);
     });
   }
 

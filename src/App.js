@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './styles/styles.css';
 import PeoplesList from './components/PeoplesList';
+const moment = require('moment');
 
 const io = require('socket.io-client');
 const socket = io();
@@ -22,10 +22,12 @@ class App extends Component {
     });
 
     socket.on('newMessage', (message) => {
+        const formattedTime = moment(message.createdAt).format('h:mm a');
         const userMessage = {
             from: message.from,
             text: message.text,
-            type: 'message'
+            type: 'message',
+            time: formattedTime,
         };
 
         this.setState({
@@ -34,10 +36,12 @@ class App extends Component {
     });
 
     socket.on('newLocationMessage', (message) => {
+        const formattedTime = moment(message.createdAt).format('h:mm a');
         const geoMessage = {
             from: message.from,
             url: message.url,
-            type: 'geoMessage'
+            type: 'geoMessage',
+            time: formattedTime,
         };
 
         this.setState({
@@ -100,11 +104,11 @@ class App extends Component {
   render() {
       const messages = this.state.messagesList.map((message, i) => {
           if(message.type === 'message'){
-              return (<li key={i}>{`${message.from}: ${message.text}`}</li>);
+              return (<li key={i}>{`${message.from} ${message.time}: ${message.text}`}</li>);
           } else if (message.type === 'geoMessage'){
               return (
                   <li key={i}>
-                      {`${message.from}: `}
+                      {`${message.from} ${message.time}: `}
                       <a target="_blank" href={message.url}>My current location</a>
                   </li>);
           }

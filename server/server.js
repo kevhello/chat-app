@@ -26,27 +26,23 @@ io.on('connection', (socket) => {
     console.log('New user connected');
 
     // Greet the individual user
-    socket.emit(
-        'newMessage',
-        generateMessage('Admin', 'Welcome to the Chat App'));
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Chat App'));
 
 
     // Tells everyone that the user has joined
-    socket.broadcast.emit(
-        'newMessage',
-        generateMessage('Admin', 'New user has joined'));
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has joined'));
 
 
     socket.on('disconnect', () => {
        console.log('Client has disconnected');
     });
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log(message);
-        io.emit(
-            'newMessage',
-            generateMessage(message.from, message.text));
+        io.emit('newMessage', generateMessage(message.from, message.text));
 
+
+        callback('This is from the server');
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
         //     text: message.text,

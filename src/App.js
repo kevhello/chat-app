@@ -20,11 +20,28 @@ class App extends Component {
     });
 
     socket.on('newMessage', (message) => {
-        console.log('newMessage', message);
-        const newMessagesList = [...this.state.messagesList, message];
-        this.setState({messagesList: newMessagesList});
+        const userMessage = {
+            from: message.from,
+            text: message.text,
+            type: 'message'
+        };
+
+        this.setState({
+            messagesList: [...this.state.messagesList, userMessage]
+        });
     });
 
+    socket.on('newLocationMessage', (message) => {
+        const geoMessage = {
+            from: message.from,
+            url: message.url,
+            type: 'geoMessage'
+        };
+
+        this.setState({
+            messagesList: [...this.state.messagesList, geoMessage]
+        });
+    });
 
   }
 
@@ -51,10 +68,39 @@ class App extends Component {
 
   };
 
+  onLocationSend = (e) => {
+      // Check if user has access to geolocation API
+      if (!navigator.geolocation){
+          // TODO: Replace alert with modal
+          return alert('Geolocation not supported by your browser');
+      }
+
+      // Starts the process, actively get the coordinates based off the browser
+      // Function: getCurrentPosition
+      // 1st arg: success callback, w/ location info
+      // 2nd arg: error handler
+      navigator.geolocation.getCurrentPosition(position => {
+          socket.emit('createLocationMessage', {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+          });
+      }, () => {
+          alert('Unable to fetch location.');
+      })
+  };
+
   render() {
-      const messages = this.state.messagesList.map((message, i) =>
-          <li key={i}>{`${message.from}: ${message.text}`}</li>
-      );
+      const messages = this.state.messagesList.map((message, i) => {
+          if(message.type === 'message'){
+              return (<li key={i}>{`${message.from}: ${message.text}`}</li>);
+          } else if (message.type === 'geoMessage'){
+              return (
+                  <li key={i}>
+                      {`${message.from}: `}
+                      <a target="_blank" href={message.url}>My current location</a>
+                  </li>);
+          }
+      });
 
     return (
       <div className="App">
@@ -72,6 +118,10 @@ class App extends Component {
             />
             <button onClick={this.onFormSubmit}>Send</button>
         </form>
+          <button
+              id="send-location"
+              onClick={this.onLocationSend}
+          >Send Location</button>
       </div>
     );
   }

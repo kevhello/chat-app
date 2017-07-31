@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './styles/styles.css';
+import PeoplesList from './components/PeoplesList';
 
 const io = require('socket.io-client');
 const socket = io();
@@ -48,6 +50,7 @@ class App extends Component {
   state = {
       inputMessage: '',
       messagesList: [],
+      disableLocBtn: false,
   };
 
   onInputChange = (e) => {
@@ -75,16 +78,21 @@ class App extends Component {
           return alert('Geolocation not supported by your browser');
       }
 
+      // This prevents the user from spamming the location button
+      this.setState({disableLocBtn: true});
+
       // Starts the process, actively get the coordinates based off the browser
       // Function: getCurrentPosition
       // 1st arg: success callback, w/ location info
       // 2nd arg: error handler
       navigator.geolocation.getCurrentPosition(position => {
+          this.setState({disableLocBtn: false});
           socket.emit('createLocationMessage', {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
           });
       }, () => {
+          this.setState({disableLocBtn: false});
           alert('Unable to fetch location.');
       })
   };
@@ -103,25 +111,37 @@ class App extends Component {
       });
 
     return (
-      <div className="App">
-          <ol id="messages">
-              {messages}
-          </ol>
+      <div className="chat">
+          <PeoplesList/>
+          <div className="chat__main">
+              <ol id="messages" className="chat__messages">
+                  {messages}
+              </ol>
 
-        <form id="message-form" onSubmit={this.onFormSubmit}>
-            <input
-                name="message"
-                value={this.state.inputMessage}
-                type="text"
-                placeholder="Enter message"
-                onChange={this.onInputChange}
-            />
-            <button onClick={this.onFormSubmit}>Send</button>
-        </form>
-          <button
-              id="send-location"
-              onClick={this.onLocationSend}
-          >Send Location</button>
+              <div className="chat__footer">
+                  <form id="message-form" onSubmit={this.onFormSubmit}>
+                      <input
+                          name="message"
+                          value={this.state.inputMessage}
+                          type="text"
+                          placeholder="Enter message"
+                          onChange={this.onInputChange}
+                          autoFocus
+                          autoComplete="off"
+                      />
+                      <button onClick={this.onFormSubmit}>Send</button>
+                  </form>
+                  <button
+                      id="send-location"
+                      onClick={this.onLocationSend}
+                      disabled={this.state.disableLocBtn}
+                  >
+                      {this.state.disableLocBtn ?
+                          'Sending location...' :
+                          'Send location'}
+                  </button>
+              </div>
+          </div>
       </div>
     );
   }

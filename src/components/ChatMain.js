@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-
 import MessagesList from './MessagesList';
 import ChatFooter from './ChatFooter';
-const moment = require('moment');
+import PeoplesList from './PeoplesList';
 
+const moment = require('moment');
 const io = require('socket.io-client');
-const socket = io();
 
 class ChatMain extends Component {
 
@@ -14,19 +13,34 @@ class ChatMain extends Component {
         disableLocBtn: false,
     };
 
+    componentWillMount(){
+        this.socket = io();
+    }
+
     componentDidMount(){
         // When the client connects
-        socket.on('connect', () => {
-            console.log('Connected to server');
+        this.socket.on('connect', () => {
+            console.log('User has connected');
+            const user = {
+                displayName: this.props.displayName,
+                roomName: this.props.roomName,
+            };
 
+            this.socket.emit('join', user, (err) => {
+                if(err) {
+                    alert(err);
+                } else {
+                    console.log('No error');
+                }
+            });
         });
 
         // Fires when the connection drops
-        socket.on('disconnect', () => {
+        this.socket.on('disconnect', () => {
             console.log('Disconnected from server');
         });
 
-        socket.on('newMessage', (message) => {
+        this.socket.on('newMessage', (message) => {
             const formattedTime = moment(message.createdAt).format('h:mm a');
             const userMessage = {
                 from: message.from,
@@ -38,11 +52,9 @@ class ChatMain extends Component {
             this.setState({
                 messagesList: [...this.state.messagesList, userMessage]
             });
-
-
         });
 
-        socket.on('newLocationMessage', (message) => {
+        this.socket.on('newLocationMessage', (message) => {
             const formattedTime = moment(message.createdAt).format('h:mm a');
             const geoMessage = {
                 from: message.from,
@@ -54,10 +66,9 @@ class ChatMain extends Component {
             this.setState({
                 messagesList: [...this.state.messagesList, geoMessage]
             });
-
         });
-
     }
+
 
     onLocationSend = (e) => {
         // Check if user has access to geolocation API
@@ -75,7 +86,7 @@ class ChatMain extends Component {
         // 2nd arg: error handler
         navigator.geolocation.getCurrentPosition(position => {
             this.setState({disableLocBtn: false});
-            socket.emit('createLocationMessage', {
+            this.socket.emit('createLocationMessage', {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
             });
@@ -119,17 +130,25 @@ class ChatMain extends Component {
         });
 
         return(
-            <div className="chat__main">
-                <MessagesList messages={messages}/>
-                <ChatFooter
-                    onFormSubmit={this.onFormSubmit}
-                    onLocationSend={this.onLocationSend}
-                    disableLocBtn={this.disableLocBtn}
-                />
+            <div className="chat">
+                <PeoplesList/>
+                <div className="chat__main">
+                    <MessagesList messages={messages}/>
+                    <ChatFooter
+                        onLocationSend={this.onLocationSend}
+                        disableLocBtn={this.disableLocBtn}
+                        socket={this.socket}
+                    />
+                </div>
             </div>
         );
 
     }
 }
+
+ChatMain.defaultProps = {
+    displayName: '',
+    roomName: '',
+};
 
 export default ChatMain;

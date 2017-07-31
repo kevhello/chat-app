@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 
 class MessagesList extends Component {
     componentDidUpdate() {
-        this.scrollToBottom();
+        if(this.props.messages.length > 0){
+            this.scrollToBottom();
+        }
     }
 
     scrollToBottom = () => {

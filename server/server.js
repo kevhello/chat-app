@@ -5,6 +5,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 
 const publicPath = path.join(__dirname, '../build');
 const port = process.env.PORT || 3000;
@@ -32,6 +33,13 @@ io.on('connection', (socket) => {
     // Tells everyone that the user has joined
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has joined'));
 
+    socket.on('join', (user, callback) => {
+        if(!isRealString(user.displayName) || !isRealString(user.roomName)){
+            callback('Display name and room name are required');
+        }
+
+        callback();
+    });
 
     socket.on('disconnect', () => {
        console.log('Client has disconnected');

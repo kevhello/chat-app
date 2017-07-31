@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 
-const io = require('socket.io-client');
-const socket = io();
-
 class ChatFooter extends Component {
     state = {
         inputMessage: '',
@@ -15,7 +12,7 @@ class ChatFooter extends Component {
     onFormSubmit = (e) => {
         e.preventDefault();
 
-        socket.emit('createMessage', {
+        this.props.socket.emit('createMessage', {
             from: 'User',
             text: this.state.inputMessage,
         }, () => {

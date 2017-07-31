@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import './styles/styles.css';
-import PeoplesList from './components/PeoplesList';
 import ChatMain from './components/ChatMain';
+import JoinPage from './components/JoinPage';
+
 
 class App extends Component {
+  state = {
+      displayName: '',
+      roomName: '',
+      shouldRenderChat: false,
+  };
+
+  onSubmitDisplayRoom = (displayName, roomName) => {
+      this.setState({displayName, roomName, shouldRenderChat: true});
+  };
 
   render() {
     return (
-      <div className="chat">
-          <PeoplesList/>
-          <ChatMain />
-      </div>
+        this.state.shouldRenderChat ?
+            <ChatMain
+                displayName={this.state.displayName}
+                roomName={this.state.roomName}
+            />
+            :
+            <JoinPage onSubmitDisplayRoom={this.onSubmitDisplayRoom}/>
     );
   }
 }

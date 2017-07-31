@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom'
 import './App.css';
 import './styles/styles.css';
 import PeoplesList from './components/PeoplesList';
@@ -6,6 +7,7 @@ const moment = require('moment');
 
 const io = require('socket.io-client');
 const socket = io();
+
 
 
 class App extends Component {
@@ -27,12 +29,14 @@ class App extends Component {
             from: message.from,
             text: message.text,
             type: 'message',
-            time: formattedTime,
+            createdAt: formattedTime,
         };
 
         this.setState({
             messagesList: [...this.state.messagesList, userMessage]
-        });
+        }, () => this.scrollToBottom());
+
+
     });
 
     socket.on('newLocationMessage', (message) => {
@@ -41,12 +45,13 @@ class App extends Component {
             from: message.from,
             url: message.url,
             type: 'geoMessage',
-            time: formattedTime,
+            createdAt: formattedTime,
         };
 
         this.setState({
             messagesList: [...this.state.messagesList, geoMessage]
-        });
+        }, () => this.scrollToBottom());
+
     });
 
   }
@@ -55,6 +60,27 @@ class App extends Component {
       inputMessage: '',
       messagesList: [],
       disableLocBtn: false,
+  };
+
+  scrollToBottom = () => {
+      // Scroll to bottom every time we add a new message to the chat box
+      const messages = ReactDOM.findDOMNode(this.messages);
+      const newMessage = ReactDOM.findDOMNode(this.messages).lastChild;
+
+      const clientHeight = messages.clientHeight;
+      const scrollTop = messages.scrollTop;
+      const scrollHeight = messages.scrollHeight;
+
+      const newMessageHeight = newMessage.offsetHeight;
+
+      let lastMessageHeight = 0;
+      if(newMessage.previousSibling){
+          lastMessageHeight = newMessage.previousSibling.offsetHeight;
+      }
+
+      if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+          newMessage.scrollIntoView({behavior: 'smooth'});
+      }
   };
 
   onInputChange = (e) => {
@@ -104,13 +130,33 @@ class App extends Component {
   render() {
       const messages = this.state.messagesList.map((message, i) => {
           if(message.type === 'message'){
-              return (<li key={i}>{`${message.from} ${message.time}: ${message.text}`}</li>);
+              return (
+                  <li key={i} className="message">
+                      <div className="message__title">
+                          <h4>{message.from}</h4>
+                          <span>{message.createdAt}</span>
+                      </div>
+                      <div className="message__body">
+                          <p>{message.text}</p>
+                      </div>
+                  </li>
+              );
           } else if (message.type === 'geoMessage'){
               return (
-                  <li key={i}>
-                      {`${message.from} ${message.time}: `}
-                      <a target="_blank" href={message.url}>My current location</a>
-                  </li>);
+                  <li key={i} className="message">
+                      <div className="message__title">
+                          <h4>{message.from}</h4>
+                          <span>{message.createdAt}</span>
+                      </div>
+                      <div className="message__body">
+                          <p>
+                              <a target="_blank" href={message.url}>My current location</a>
+                          </p>
+                      </div>
+                  </li>
+              );
+          } else {
+              return null;
           }
       });
 
@@ -118,7 +164,7 @@ class App extends Component {
       <div className="chat">
           <PeoplesList/>
           <div className="chat__main">
-              <ol id="messages" className="chat__messages">
+              <ol id="messages" className="chat__messages" ref={messages => this.messages = messages}>
                   {messages}
               </ol>
 

@@ -13,12 +13,10 @@ class ChatFooter extends Component {
         e.preventDefault();
 
         this.props.socket.emit('createMessage', {
-            from: 'User',
             text: this.state.inputMessage,
         }, () => {
-
+            this.setState({inputMessage: ''});
         });
-        this.setState({inputMessage: ''});
     };
 
     render(){

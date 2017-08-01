@@ -22,9 +22,12 @@ class App extends Component {
             <ChatMain
                 displayName={this.state.displayName}
                 roomName={this.state.roomName}
+                socket={this.socket}
             />
             :
-            <JoinPage onSubmitDisplayRoom={this.onSubmitDisplayRoom}/>
+            <JoinPage
+                onSubmitDisplayRoom={this.onSubmitDisplayRoom}
+            />
     );
   }
 }

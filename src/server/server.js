@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
+const {Rooms} = require('./utils/rooms');
 
 const publicPath = path.join(__dirname, '../../build');
 const port = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ const server = http.createServer(app);
 // Returns the websocket server
 const io = socketIO(server);
 const users = new Users();
+const rooms = new Rooms();
 
 app.use(express.static(publicPath));
 
@@ -26,6 +28,7 @@ app.use(express.static(publicPath));
 // You'll usually not be attaching anything to 'io'.
 // io.on connection is a special event.
 io.on('connection', (socket) => {
+    io.emit('updateRoomList', {rooms: rooms.rooms});
 
     socket.on('join', (user, callback) => {
         if(!isRealString(user.displayName) || !isRealString(user.roomName)){
@@ -41,6 +44,10 @@ io.on('connection', (socket) => {
 
         users.addUser(socket.id, user.displayName, user.roomName);
 
+        rooms.addUserToRoom(socket.id, user.roomName);
+        io.emit('updateRoomList', {rooms: rooms.rooms});
+
+        console.log(rooms.rooms);
         // Tells every user the new list of users in the chat room
         io.to(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
 
@@ -58,8 +65,12 @@ io.on('connection', (socket) => {
        const user = users.removeUser(socket.id);
 
        if(user) {
+           rooms.removeUserFromRoom(socket.id, user.roomName);
+           console.log(rooms.rooms);
            io.to(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
            io.to(user.roomName).emit('newMessage', generateMessage('Admin', `${user.displayName} has left`));
+
+           io.emit('updateRoomList', {rooms: rooms.rooms});
        }
     });
 

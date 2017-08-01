@@ -1,11 +1,25 @@
 import React, {Component} from 'react';
 import {isRealString} from '../server/utils/validation';
+const io = require('socket.io-client');
 
 class JoinPage extends Component {
     state = {
         inputDisplay: '',
         inputRoom: '',
+        rooms: {},
     };
+
+    componentDidMount(){
+        const socket = io();
+
+        socket.on('connect', () => {
+
+        });
+
+        socket.on('updateRoomList', (rooms) => {
+            this.setState({rooms});
+        });
+    }
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -18,7 +32,19 @@ class JoinPage extends Component {
         }
     };
 
+    onClickRoom = (e) => {
+        e.preventDefault();
+        this.setState({inputRoom: e.target.value});
+    };
+
     render(){
+        let rooms = null;
+
+        if(this.state.rooms.rooms)
+            rooms = this.state.rooms.rooms.map( room =>
+            <option value={room.roomName} key={room.roomName}>{room.roomName}</option>
+        );
+
         return(
                 <div className="centered-form">
                     <div className="centered-form__form">
@@ -50,6 +76,10 @@ class JoinPage extends Component {
                             <div className="form-field">
                                 <button onSubmit={this.onSubmit}>Join</button>
                             </div>
+                            <select id="room-dropdown" name="rooms" onChange={this.onClickRoom}>
+                                <option value="" selected>Active rooms</option>
+                                {rooms}
+                            </select>
                         </form>
                     </div>
                 </div>

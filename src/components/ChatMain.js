@@ -11,6 +11,7 @@ class ChatMain extends Component {
     state = {
         messagesList: [],
         disableLocBtn: false,
+        usersList: [],
     };
 
     componentWillMount(){
@@ -38,6 +39,10 @@ class ChatMain extends Component {
         // Fires when the connection drops
         this.socket.on('disconnect', () => {
             console.log('Disconnected from server');
+        });
+
+        this.socket.on('updateUserList', (users) => {
+           this.setState({usersList: users});
         });
 
         this.socket.on('newMessage', (message) => {
@@ -131,7 +136,7 @@ class ChatMain extends Component {
 
         return(
             <div className="chat">
-                <PeoplesList/>
+                <PeoplesList usersList={this.state.usersList} />
                 <div className="chat__main">
                     <MessagesList messages={messages}/>
                     <ChatFooter

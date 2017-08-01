@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {isRealString} from '../server/utils/validation';
 
 class JoinPage extends Component {
     state = {
@@ -8,7 +9,13 @@ class JoinPage extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onSubmitDisplayRoom(this.state.inputDisplay, this.state.inputRoom);
+        const inputDisplay = this.state.inputDisplay;
+        const inputRoom = this.state.inputRoom;
+        if(isRealString(inputDisplay) && isRealString(inputRoom)){
+            this.props.onSubmitDisplayRoom(inputDisplay, inputRoom);
+        } else {
+            alert("Invalid display and/or room name");
+        }
     };
 
     render(){
@@ -27,6 +34,7 @@ class JoinPage extends Component {
                                     value={this.state.inputDisplay}
                                     autoFocus
                                     onChange={e => this.setState({inputDisplay: e.target.value})}
+                                    required
                                 />
                             </div>
                             <div className="form-field">
@@ -36,6 +44,7 @@ class JoinPage extends Component {
                                     name="room"
                                     value={this.state.inputRoom}
                                     onChange={e => this.setState({inputRoom: e.target.value})}
+                                    required
                                 />
                             </div>
                             <div className="form-field">

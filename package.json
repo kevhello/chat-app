@@ -17,12 +17,12 @@
     "react-scripts": "1.0.10"
   },
   "scripts": {
-    "start": "node server/server.js",
-    "start-d": "nodemon server/server.js",
+    "start": "node src/server/server.js",
+    "start-d": "nodemon src/server/server.js",
     "start-r": "react-scripts start",
     "build": "react-scripts build",
     "test-r": "react-scripts test --env=jsdom",
-    "test": "mocha server/**/*.test.js",
+    "test": "mocha src/server/**/*.test.js",
     "test-watch": "nodemon --exec npm test",
     "eject": "react-scripts eject"
   },

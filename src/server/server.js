@@ -31,7 +31,10 @@ io.on('connection', (socket) => {
 
     // TODO: send only room names
     const roomNames = rooms.rooms.map(room => room.roomName);
-    io.emit('updateRoomList', {rooms: roomNames});
+    if(roomNames){
+        io.emit('updateRoomList', {rooms: roomNames});
+    }
+
 
     socket.on('join', (user, callback) => {
         if(!isRealString(user.displayName) || !isRealString(user.roomName)){
@@ -50,7 +53,9 @@ io.on('connection', (socket) => {
         rooms.addUserToRoom(socket.id, user.roomName);
         //io.emit('updateRoomList', {rooms: rooms.rooms});
         const roomNames = rooms.rooms.map(room => room.roomName);
-        io.emit('updateRoomList', {rooms: roomNames});
+        if(roomNames){
+            io.emit('updateRoomList', {rooms: roomNames});
+        }
 
         // Tells every user the new list of users in the chat room
         io.to(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
@@ -76,7 +81,9 @@ io.on('connection', (socket) => {
 
            //io.emit('updateRoomList', {rooms: rooms.rooms});
            const roomNames = rooms.rooms.map(room => room.roomName);
-           io.emit('updateRoomList', {rooms: roomNames});
+           if(roomNames){
+               io.emit('updateRoomList', {rooms: roomNames});
+           }
 
        }
     });

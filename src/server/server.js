@@ -28,7 +28,10 @@ app.use(express.static(publicPath));
 // You'll usually not be attaching anything to 'io'.
 // io.on connection is a special event.
 io.on('connection', (socket) => {
-    io.emit('updateRoomList', {rooms: rooms.rooms});
+
+    // TODO: send only room names
+    const roomNames = rooms.rooms.map(room => room.roomName);
+    io.emit('updateRoomList', {rooms: roomNames});
 
     socket.on('join', (user, callback) => {
         if(!isRealString(user.displayName) || !isRealString(user.roomName)){
@@ -45,9 +48,10 @@ io.on('connection', (socket) => {
         users.addUser(socket.id, user.displayName, user.roomName);
 
         rooms.addUserToRoom(socket.id, user.roomName);
-        io.emit('updateRoomList', {rooms: rooms.rooms});
+        //io.emit('updateRoomList', {rooms: rooms.rooms});
+        const roomNames = rooms.rooms.map(room => room.roomName);
+        io.emit('updateRoomList', {rooms: roomNames});
 
-        console.log(rooms.rooms);
         // Tells every user the new list of users in the chat room
         io.to(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
 
@@ -66,11 +70,14 @@ io.on('connection', (socket) => {
 
        if(user) {
            rooms.removeUserFromRoom(socket.id, user.roomName);
-           console.log(rooms.rooms);
+
            io.to(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
            io.to(user.roomName).emit('newMessage', generateMessage('Admin', `${user.displayName} has left`));
 
-           io.emit('updateRoomList', {rooms: rooms.rooms});
+           //io.emit('updateRoomList', {rooms: rooms.rooms});
+           const roomNames = rooms.rooms.map(room => room.roomName);
+           io.emit('updateRoomList', {rooms: roomNames});
+
        }
     });
 

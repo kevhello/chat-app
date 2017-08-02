@@ -6,7 +6,7 @@ class JoinPage extends Component {
     state = {
         inputDisplay: '',
         inputRoom: '',
-        rooms: {},
+        rooms: [],
     };
 
     componentDidMount(){
@@ -17,7 +17,14 @@ class JoinPage extends Component {
         });
 
         socket.on('updateRoomList', (rooms) => {
-            this.setState({rooms});
+            this.setState(()=> {
+                if(rooms.rooms){
+                    const roomNames = rooms.rooms.filter((room) => room !== null);
+                    return {rooms: roomNames};
+                } else {
+                    return {rooms: []};
+                }
+            });
         });
     }
 
@@ -39,10 +46,9 @@ class JoinPage extends Component {
 
     render(){
         let rooms = null;
-
-        if(this.state.rooms.rooms)
-            rooms = this.state.rooms.rooms.map( room =>
-            <option value={room.roomName} key={room.roomName}>{room.roomName}</option>
+        if(this.state.rooms.length > 0)
+            rooms = this.state.rooms.map( room =>
+            <option value={room} key={room}>{room}</option>
         );
 
         return(

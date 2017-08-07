@@ -11,6 +11,7 @@
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "expect": "^1.20.2",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
@@ -20,6 +21,7 @@
     "start": "node src/server/server.js",
     "start-d": "nodemon src/server/server.js",
     "start-r": "react-scripts start",
+    "dev": "concurrently \"nodemon src/server/server.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test-r": "react-scripts test --env=jsdom",
     "test": "mocha src/server/**/*.test.js",

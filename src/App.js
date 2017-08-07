@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
-import './styles/styles.css';
+import './styles/temp/styles.css'
 import ChatMain from './components/ChatMain';
 import JoinPage from './components/JoinPage';
 

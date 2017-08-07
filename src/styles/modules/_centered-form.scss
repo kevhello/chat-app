@@ -1,0 +1,24 @@
+.centered-form {
+  display: flex;
+  align-items: center;
+  background-color: $bgLightGrey;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1.4rem;
+
+  &__form {
+    background: white;
+    border-radius: 10px;
+    width: 300px;
+    padding: 20px;
+  }
+
+  &__label {
+    display: flex;
+    margin-bottom: 7px;
+  }
+
+
+}

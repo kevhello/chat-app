@@ -30,7 +30,7 @@ class MessagesList extends Component {
     };
     render(){
         return(
-            <ol id="messages" className="chat__messages" ref={messages => this.messages = messages}>
+            <ol className="chat__messages" ref={messages => this.messages = messages}>
                 {this.props.messages}
             </ol>
         );

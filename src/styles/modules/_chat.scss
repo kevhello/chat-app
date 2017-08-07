@@ -1,0 +1,69 @@
+.chat {
+  display: flex;
+  font-family: "Source Sans Pro", sans-serif;
+  flex-direction: row;
+
+  &__sidebar {
+    width: 260px;
+    overflow-y: scroll;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  &__users-list-item {
+    background: $brightGreen;
+    width: 170px;
+    height: 50px;
+    border-radius: 11px;
+    color: white;
+    list-style: none;
+    text-align: center;
+    line-height: 2.3;
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+
+  &__header {
+    display: block;
+    text-align: center;
+    font-size: 1.6rem;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 80%;
+  }
+
+
+  &__messages {
+    display: flex;
+    flex-grow: 1;
+    overflow-y: scroll;
+    flex-direction: column;
+  }
+
+
+  &__footer {
+    display: flex;
+    flex-shrink: 0;
+    padding: 10px;
+    background: $bgGrey;
+  }
+
+  &__footer-form {
+    display: flex;
+    flex-grow: 1;
+    margin-right:10px;
+  }
+
+  &__footer-messagebox {
+    display: flex;
+    flex-grow: 1;
+    margin-right: 10px;
+    font-size: 1.25rem;
+    padding-left: 12px;
+  }
+}

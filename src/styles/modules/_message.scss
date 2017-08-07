@@ -1,0 +1,29 @@
+.message {
+  display: inline-block;
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: $brightGreen;
+  border-radius: 10px;
+  padding: 17px 50px 0px 20px;
+  font-size: 1.2rem;
+
+  width: 300px;
+  margin-bottom: 20px;
+
+  &__title {
+    display: inline;
+    margin-right: 20px;
+  }
+
+  &__header {
+    display: inline;
+    margin-right: 20px;
+  }
+
+  &__time {
+    display: inline;
+  }
+
+  &__body {
+    word-wrap: break-word;
+  }
+}

@@ -1,0 +1,25 @@
+.button {
+  $root: &;
+  padding: 10px 55px;
+  background-color: $brightGreen;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.3rem;
+
+  &__centered {
+    display: block;
+    margin: 0 auto;
+  }
+
+  &__footer {
+    font-family: "Source Sans Pro", sans-serif;
+
+  }
+
+  #{$root}:hover {
+    background-color: #23D5AF;
+    font-size: 50rem;
+  }
+
+}

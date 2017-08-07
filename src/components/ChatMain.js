@@ -107,8 +107,8 @@ class ChatMain extends Component {
                 return (
                     <li key={i} className="message">
                         <div className="message__title">
-                            <h4>{message.from}</h4>
-                            <span>{message.createdAt}</span>
+                            <h4 className="message__header">{message.from}</h4>
+                            <span className="message__time">{message.createdAt}</span>
                         </div>
                         <div className="message__body">
                             <p>{message.text}</p>
@@ -119,8 +119,8 @@ class ChatMain extends Component {
                 return (
                     <li key={i} className="message">
                         <div className="message__title">
-                            <h4>{message.from}</h4>
-                            <span>{message.createdAt}</span>
+                            <h4 className="message__header">{message.from}</h4>
+                            <span className="message__time">{message.createdAt}</span>
                         </div>
                         <div className="message__body">
                             <p>
@@ -136,9 +136,12 @@ class ChatMain extends Component {
 
         return(
             <div className="chat">
-                <PeoplesList usersList={this.state.usersList} />
+                <PeoplesList
+                    usersList={this.state.usersList}
+                    roomName={this.props.roomName}
+                />
                 <div className="chat__main">
-                    <MessagesList messages={messages}/>
+                    <MessagesList messages={messages} />
                     <ChatFooter
                         onLocationSend={this.onLocationSend}
                         disableLocBtn={this.disableLocBtn}

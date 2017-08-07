@@ -55,7 +55,7 @@ class JoinPage extends Component {
                 <div className="centered-form">
                     <div className="centered-form__form">
                             <form onSubmit={this.onSubmit}>
-                            <div className="form-field">
+                            <div className="form-field title">
                                 <h3>Join a Chat!</h3>
                             </div>
                             <div className="form-field">
@@ -63,6 +63,7 @@ class JoinPage extends Component {
                                 <input
                                     type="text"
                                     name="name"
+                                    className="form-field__input"
                                     value={this.state.inputDisplay}
                                     autoFocus
                                     onChange={e => this.setState({inputDisplay: e.target.value})}
@@ -74,15 +75,14 @@ class JoinPage extends Component {
                                 <input
                                     type="text"
                                     name="room"
+                                    className="form-field__input"
                                     value={this.state.inputRoom}
                                     onChange={e => this.setState({inputRoom: e.target.value})}
                                     required
                                 />
                             </div>
-                            <div className="form-field">
-                                <button onSubmit={this.onSubmit}>Join</button>
-                            </div>
-                            <select id="room-dropdown" name="rooms" onChange={this.onClickRoom}>
+                            <button className="button button__centered" onSubmit={this.onSubmit}>Join</button>
+                            <select className="dropdown" name="rooms" onChange={this.onClickRoom}>
                                 <option value="" selected>Active rooms</option>
                                 {rooms}
                             </select>

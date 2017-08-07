@@ -22,8 +22,9 @@ class ChatFooter extends Component {
     render(){
         return(
             <div className="chat__footer">
-                <form id="message-form" onSubmit={this.props.onFormSubmit}>
+                <form className="chat chat__footer-form" onSubmit={this.props.onFormSubmit}>
                     <input
+                        className="chat chat__footer-messagebox"
                         name="message"
                         value={this.state.inputMessage}
                         type="text"
@@ -32,10 +33,14 @@ class ChatFooter extends Component {
                         autoFocus
                         autoComplete="off"
                     />
-                    <button onClick={this.onFormSubmit}>Send</button>
+                    <button
+                        className="button button__overlay"
+                        onClick={this.onFormSubmit}
+                    >Send</button>
                 </form>
                 <button
                     id="send-location"
+                    className="button button__overlay"
                     onClick={this.props.onLocationSend}
                     disabled={this.props.disableLocBtn}
                 >

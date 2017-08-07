@@ -129,3 +129,5 @@
     display: inline; }
   .message__body {
     word-wrap: break-word; }
+  .message:hover {
+    background-color: #23D5AF; }

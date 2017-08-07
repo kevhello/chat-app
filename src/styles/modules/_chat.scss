@@ -37,14 +37,12 @@
     width: 80%;
   }
 
-
   &__messages {
     display: flex;
     flex-grow: 1;
     overflow-y: scroll;
     flex-direction: column;
   }
-
 
   &__footer {
     display: flex;

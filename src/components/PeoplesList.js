@@ -8,8 +8,8 @@ class PeoplesList extends Component {
 
         return(
             <div className="chat chat__sidebar">
-                <h3 className="chat chat__header">Chatters</h3>
                 <h2 className="chat chat__header">Room Name: <br/> {this.props.roomName}</h2>
+                <h3 className="chat chat__header">Chatters:</h3>
                 <div id="users">
                     <ol>
                         {usersList}

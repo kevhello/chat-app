@@ -59,7 +59,7 @@ class JoinPage extends Component {
                                 <h3>Join a Chat!</h3>
                             </div>
                             <div className="form-field">
-                                <label>Display name</label>
+                                <label className="centered-form__label">Display name</label>
                                 <input
                                     type="text"
                                     name="name"
@@ -71,7 +71,7 @@ class JoinPage extends Component {
                                 />
                             </div>
                             <div className="form-field">
-                                <label>Room name</label>
+                                <label className="centered-form__label">Room name</label>
                                 <input
                                     type="text"
                                     name="room"
